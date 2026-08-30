@@ -1,0 +1,4 @@
+{
+  "extends": "../../packages/config/eslint-nest.json",
+  "ignorePatterns": ["dist", "node_modules", "prisma/seed.ts"]
+}

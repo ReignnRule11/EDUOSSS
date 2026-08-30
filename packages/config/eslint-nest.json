@@ -1,0 +1,7 @@
+{
+  "extends": ["./eslint-base.json"],
+  "rules": {
+    "@typescript-eslint/no-extraneous-class": "off",
+    "@typescript-eslint/consistent-type-imports": "off"
+  }
+}

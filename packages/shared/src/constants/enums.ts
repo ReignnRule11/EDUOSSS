@@ -1,0 +1,213 @@
+export enum Gender {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+  OTHER = "OTHER",
+}
+
+export enum AttendanceStatus {
+  PRESENT = "PRESENT",
+  ABSENT = "ABSENT",
+  LATE = "LATE",
+  EXCUSED = "EXCUSED",
+}
+
+export enum GradeLevel {
+  NURSERY = "NURSERY",
+  KG = "KG",
+  PRIMARY = "PRIMARY",
+  JUNIOR_SECONDARY = "JUNIOR_SECONDARY",
+  SENIOR_SECONDARY = "SENIOR_SECONDARY",
+}
+
+export enum Term {
+  FIRST = "FIRST",
+  SECOND = "SECOND",
+  THIRD = "THIRD",
+}
+
+export enum AcademicStatus {
+  ACTIVE = "ACTIVE",
+  SUSPENDED = "SUSPENDED",
+  GRADUATED = "GRADUATED",
+  DROPPED = "DROPPED",
+}
+
+export enum FileAccess {
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+}
+
+export enum AuditAction {
+  CREATE = "CREATE",
+  UPDATE = "UPDATE",
+  DELETE = "DELETE",
+  LOGIN = "LOGIN",
+  LOGIN_FAILED = "LOGIN_FAILED",
+  LOGOUT = "LOGOUT",
+  REFRESH = "REFRESH",
+  PASSWORD_RESET = "PASSWORD_RESET",
+  EMAIL_VERIFY = "EMAIL_VERIFY",
+  MFA_ENABLE = "MFA_ENABLE",
+  MFA_DISABLE = "MFA_DISABLE",
+  SESSION_REVOKE = "SESSION_REVOKE",
+  DOWNLOAD = "DOWNLOAD",
+  EXPORT = "EXPORT",
+}
+
+export enum SessionStatus {
+  UPCOMING = "UPCOMING",
+  ACTIVE = "ACTIVE",
+  COMPLETED = "COMPLETED",
+  CLOSED = "CLOSED",
+}
+
+export enum TermStatus {
+  UPCOMING = "UPCOMING",
+  ACTIVE = "ACTIVE",
+  COMPLETED = "COMPLETED",
+  CLOSED = "CLOSED",
+}
+
+export enum Weekday {
+  MONDAY = "MONDAY",
+  TUESDAY = "TUESDAY",
+  WEDNESDAY = "WEDNESDAY",
+  THURSDAY = "THURSDAY",
+  FRIDAY = "FRIDAY",
+  SATURDAY = "SATURDAY",
+}
+
+export enum AnnouncementAudience {
+  ALL = "ALL",
+  STUDENTS = "STUDENTS",
+  TEACHERS = "TEACHERS",
+  STAFF = "STAFF",
+  PARENTS = "PARENTS",
+}
+
+export enum GuardianRelationship {
+  FATHER = "FATHER",
+  MOTHER = "MOTHER",
+  GUARDIAN = "GUARDIAN",
+  SIBLING = "SIBLING",
+  GRANDPARENT = "GRANDPARENT",
+  OTHER = "OTHER",
+}
+
+export enum MedicalRecordType {
+  CHECKUP = "CHECKUP",
+  IMMUNIZATION = "IMMUNIZATION",
+  CONDITION = "CONDITION",
+  ALLERGY = "ALLERGY",
+  MEDICATION = "MEDICATION",
+  OTHER = "OTHER",
+}
+
+export enum DisciplineCategory {
+  MISCONDUCT = "MISCONDUCT",
+  ACADEMIC_DISHONESTY = "ACADEMIC_DISHONESTY",
+  BULLYING = "BULLYING",
+  ATTENDANCE = "ATTENDANCE",
+  OTHER = "OTHER",
+}
+
+export enum DisciplineSeverity {
+  MINOR = "MINOR",
+  MAJOR = "MAJOR",
+  SEVERE = "SEVERE",
+}
+
+export enum DisciplineStatus {
+  OPEN = "OPEN",
+  RESOLVED = "RESOLVED",
+  APPEALED = "APPEALED",
+}
+
+export enum DocumentCategory {
+  BIRTH_CERTIFICATE = "BIRTH_CERTIFICATE",
+  REPORT_CARD = "REPORT_CARD",
+  MEDICAL = "MEDICAL",
+  TRANSFER_CERTIFICATE = "TRANSFER_CERTIFICATE",
+  ID_PHOTO = "ID_PHOTO",
+  OTHER = "OTHER",
+}
+
+export enum TransferStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  COMPLETED = "COMPLETED",
+  REJECTED = "REJECTED",
+}
+
+export enum PromotionStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+}
+
+export enum TimelineEventType {
+  REGISTRATION = "REGISTRATION",
+  PROFILE_UPDATE = "PROFILE_UPDATE",
+  ENROLLMENT = "ENROLLMENT",
+  PROMOTION = "PROMOTION",
+  TRANSFER = "TRANSFER",
+  DISCIPLINE = "DISCIPLINE",
+  MEDICAL = "MEDICAL",
+  DOCUMENT = "DOCUMENT",
+  ATTENDANCE = "ATTENDANCE",
+  STATUS_CHANGE = "STATUS_CHANGE",
+  GUARDIAN = "GUARDIAN",
+  OTHER = "OTHER",
+}
+
+export enum QualificationLevel {
+  CERTIFICATE = "CERTIFICATE",
+  DIPLOMA = "DIPLOMA",
+  ASSOCIATE = "ASSOCIATE",
+  BACHELOR = "BACHELOR",
+  MASTER = "MASTER",
+  DOCTORATE = "DOCTORATE",
+  OTHER = "OTHER",
+}
+
+export enum TeacherAttendanceStatus {
+  PRESENT = "PRESENT",
+  ABSENT = "ABSENT",
+  LATE = "LATE",
+  EXCUSED = "EXCUSED",
+  HALF_DAY = "HALF_DAY",
+}
+
+export enum ReviewRating {
+  EXCELLENT = "EXCELLENT",
+  GOOD = "GOOD",
+  SATISFACTORY = "SATISFACTORY",
+  NEEDS_IMPROVEMENT = "NEEDS_IMPROVEMENT",
+  POOR = "POOR",
+}
+
+export enum LeaveType {
+  ANNUAL = "ANNUAL",
+  SICK = "SICK",
+  MATERNITY = "MATERNITY",
+  PATERNITY = "PATERNITY",
+  PERSONAL = "PERSONAL",
+  UNPAID = "UNPAID",
+  OTHER = "OTHER",
+}
+
+export enum LeaveStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+  CANCELLED = "CANCELLED",
+}
+
+export enum TeacherDocumentCategory {
+  CONTRACT = "CONTRACT",
+  RESUME = "RESUME",
+  CERTIFICATE = "CERTIFICATE",
+  ID_DOCUMENT = "ID_DOCUMENT",
+  MEDICAL = "MEDICAL",
+  EVALUATION = "EVALUATION",
+  OTHER = "OTHER",
+}

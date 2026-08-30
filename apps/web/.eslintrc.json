@@ -1,0 +1,4 @@
+{
+  "extends": "../../packages/config/eslint-next.json",
+  "ignorePatterns": ["node_modules", ".next", "out"]
+}

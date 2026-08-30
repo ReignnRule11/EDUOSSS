@@ -1,0 +1,17 @@
+{
+  "name": "@eduos/config",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    "./prettier": "./prettier.json",
+    "./eslint-base": "./eslint-base.json",
+    "./eslint-next": "./eslint-next.json",
+    "./eslint-nest": "./eslint-nest.json",
+    "./tsconfig.base": "./tsconfig.base.json",
+    "./tsconfig.next": "./tsconfig.next.json",
+    "./tsconfig.nest": "./tsconfig.nest.json"
+  },
+  "files": [
+    "*.json"
+  ]
+}

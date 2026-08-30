@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  validate:
+    name: Lint / typecheck / unit tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        workspace: [api, web]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build shared
+        run: npm run build -w @eduos/shared
+
+      - name: Lint (${{ matrix.workspace }})
+        run: npm run lint -w @eduos/${{ matrix.workspace }}
+
+      - name: Typecheck (${{ matrix.workspace }})
+        run: npm run typecheck -w @eduos/${{ matrix.workspace }}
+
+      - name: Build (${{ matrix.workspace }})
+        run: npm run build -w @eduos/${{ matrix.workspace }}
+
+  unit-tests:
+    name: API unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate -w @eduos/api
+      - run: npm test -w @eduos/api
+
+  e2e-security:
+    name: Security e2e tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: eduos_test
+          POSTGRES_USER: eduos
+          POSTGRES_PASSWORD: testpass
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U eduos -d eduos_test"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+    env:
+      DATABASE_URL: postgresql://eduos:testpass@localhost:5432/eduos_test
+      REDIS_URL: redis://localhost:6379
+      JWT_ACCESS_SECRET: test-access-secret-0123456789abcdef
+      JWT_REFRESH_SECRET: test-refresh-secret-0123456789abcdef
+      CORS_ORIGINS: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate -w @eduos/api
+      - name: Apply migrations
+        run: npx prisma migrate deploy --schema apps/api/prisma/schema.prisma
+      - name: Seed test data
+        run: npm run db:seed -w @eduos/api
+      - name: Run e2e security tests
+        run: npm run test:e2e -w @eduos/api
+
+  docker:
+    name: Build production images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image
+        run: docker build -f apps/api/Dockerfile -t eduos-api:ci .
+      - name: Build Web image
+        run: docker build -f apps/web/Dockerfile -t eduos-web:ci .

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-label="Graduation ceremony">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" fill="url(#bg4)"/>
+  <rect x="0" y="420" width="900" height="180" fill="#0B1F4B"/>
+  <path d="M450 80 L520 130 L450 180 L380 130 Z" fill="#FDE68A"/>
+  <path d="M450 120 L450 200" stroke="#FDE68A" stroke-width="8"/>
+  <circle cx="520" cy="150" r="8" fill="#FDE68A"/>
+  <ellipse cx="450" cy="480" rx="46" ry="12" fill="#DBEAFE"/>
+  <ellipse cx="450" cy="430" rx="34" ry="10" fill="#BFDBFE"/>
+  <ellipse cx="450" cy="390" rx="24" ry="8" fill="#93C5FD"/>
+  <path d="M250 320 Q450 200 650 320" fill="none" stroke="#FDE68A" stroke-width="6"/>
+  <rect x="300" y="330" width="300" height="40" rx="8" fill="#DBEAFE"/>
+</svg>
