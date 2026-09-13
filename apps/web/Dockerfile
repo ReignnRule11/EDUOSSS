@@ -27,6 +27,7 @@ COPY --from=build /workspace/packages ./packages
 COPY --from=build /workspace/apps/web/.next ./apps/web/.next
 COPY --from=build /workspace/apps/web/public ./apps/web/public
 COPY --from=build /workspace/apps/web/package.json ./apps/web/package.json
+COPY --from=build /workspace/apps/web/next.config.mjs ./apps/web/next.config.mjs
 
 WORKDIR /workspace/apps/web
 EXPOSE 3000
