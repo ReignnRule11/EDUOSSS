@@ -4,6 +4,8 @@ import request from "supertest";
 
 import { AppModule } from "../src/app.module";
 import { ValidationFailedException } from "../src/common/exceptions/business.exceptions";
+import { PrismaService } from "../src/database/prisma.service";
+import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
 
 /**
  * Security integration tests for the confirmed critical vulnerabilities:
@@ -31,14 +33,16 @@ const PARENT = {
   tenantSlug: "bright-future-academy",
 };
 
-// Seed fixtures (tenant: bright-future-academy)
-const STUDENT_A_ID = "cmsm1sseu00051o135qoylwe7"; // Bulk Two (linked to lms.student@test.local)
-const STUDENT_B_ID = "cmsev3xb8000adbc9yy6avdhr"; // Amina Bello
-const PARENT_CHILD_ID = "cmsm1m00a0001s59664rt3v2s"; // Test SIS (linked via guardian amina@sis.test)
-const CLASS_A = "cmsev3xbw000kdbc9da5rrs9n"; // Primary 4A
+// IDs are resolved from deterministic fixture keys at runtime, never hard-coded.
+let STUDENT_A_ID: string;
+let STUDENT_B_ID: string;
+let PARENT_CHILD_ID: string;
+let CLASS_A: string;
+let MATH_SUBJECT_ID: string;
 
 describe("Security remediation (C7.x)", () => {
   let app: INestApplication;
+  let prisma: PrismaService;
   let adminToken: string;
   let studentToken: string;
   let parentToken: string;
@@ -66,6 +70,13 @@ describe("Security remediation (C7.x)", () => {
       }),
     );
     await app.init();
+    prisma = app.get(PrismaService);
+    const fixtures = await ensureSecurityE2EFixtures(prisma);
+    STUDENT_A_ID = fixtures.studentAId;
+    STUDENT_B_ID = fixtures.studentBId;
+    PARENT_CHILD_ID = fixtures.parentChildId;
+    CLASS_A = fixtures.classGroupId;
+    MATH_SUBJECT_ID = fixtures.mathSubjectId;
 
     const login = async (creds: typeof ADMIN) => {
       const res = await request(app.getHttpServer())
@@ -152,7 +163,7 @@ describe("Security remediation (C7.x)", () => {
         .send({
           studentId,
           classGroupId: CLASS_A,
-          subjectId: "cmsev3xc2000mdbc9lsnyji3a", // Mathematics
+          subjectId: MATH_SUBJECT_ID,
           academicYear: "2026/2027",
           term: "FIRST",
           score: 70,
