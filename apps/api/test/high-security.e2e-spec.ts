@@ -6,6 +6,7 @@ import request from "supertest";
 import { AppModule } from "../src/app.module";
 import { ValidationFailedException } from "../src/common/exceptions/business.exceptions";
 import { PrismaService } from "../src/database/prisma.service";
+import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
 import { RedisService } from "../src/database/redis.service";
 
 /**
@@ -59,6 +60,7 @@ describe("High security remediation (H7.x)", () => {
     await app.init();
     prisma = app.get(PrismaService);
     redis = app.get(RedisService);
+    await ensureSecurityE2EFixtures(prisma);
 
     const login = async (email: string, password: string, tenant: string) => {
       const res = await request(app.getHttpServer())
