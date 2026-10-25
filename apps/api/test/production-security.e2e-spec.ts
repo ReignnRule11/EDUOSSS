@@ -11,6 +11,7 @@ import configuration, {
   validateProductionConfig,
 } from "../src/config/configuration";
 import { PrismaService } from "../src/database/prisma.service";
+import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
 
 /**
  * Production-security hardening regression tests:
@@ -55,6 +56,7 @@ describe("Production security hardening", () => {
     );
     await app.init();
     prisma = app.get(PrismaService);
+    await ensureSecurityE2EFixtures(prisma);
 
     const login = async (email: string, password: string, tenant: string) => {
       const res = await request(app.getHttpServer())
