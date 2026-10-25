@@ -6,12 +6,12 @@ import { Test } from "@nestjs/testing";
 import request from "supertest";
 
 import { AppModule } from "../src/app.module";
+import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
 import { ValidationFailedException } from "../src/common/exceptions/business.exceptions";
 import configuration, {
   validateProductionConfig,
 } from "../src/config/configuration";
 import { PrismaService } from "../src/database/prisma.service";
-import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
 
 /**
  * Production-security hardening regression tests:
