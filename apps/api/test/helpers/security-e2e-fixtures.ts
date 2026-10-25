@@ -38,7 +38,13 @@ export async function ensureSecurityE2EFixtures(prisma: PrismaClient) {
     where: { tenantId_code: { tenantId: tenant.id, code: "MATH" } },
   });
 
-  async function ensureUser(email: string, password: string, firstName: string, lastName: string, role: string) {
+  async function ensureUser(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    role: string,
+  ) {
     const passwordHash = await bcrypt.hash(password, 12);
     const user = await prisma.user.upsert({
       where: { tenantId_email: { tenantId: tenant.id, email } },
