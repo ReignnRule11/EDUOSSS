@@ -73,7 +73,7 @@ export async function ensureSecurityE2EFixtures(prisma: PrismaClient) {
   }
 
   const admin = await ensureUser(
-    "admin@eduos.local",
+    "security.admin@test.local",
     SECURITY_E2E_PASSWORDS.admin,
     "System",
     "Administrator",
@@ -171,36 +171,29 @@ export async function ensureSecurityE2EFixtures(prisma: PrismaClient) {
     },
   });
 
-  const guardian = await prisma.guardian.findFirst({
-    where: {
+  await prisma.guardian.upsert({
+    where: { id: "e2e-security-parent-guardian" },
+    update: {
       tenantId: tenant.id,
       studentId: parentChild.id,
+      firstName: parentUser.firstName,
+      lastName: parentUser.lastName,
+      relationship: GuardianRelationship.MOTHER,
       email: parentUser.email,
+      isPrimary: true,
+      deletedAt: null,
+    },
+    create: {
+      id: "e2e-security-parent-guardian",
+      tenantId: tenant.id,
+      studentId: parentChild.id,
+      firstName: parentUser.firstName,
+      lastName: parentUser.lastName,
+      relationship: GuardianRelationship.MOTHER,
+      email: parentUser.email,
+      isPrimary: true,
     },
   });
-  if (guardian) {
-    await prisma.guardian.update({
-      where: { id: guardian.id },
-      data: {
-        firstName: parentUser.firstName,
-        lastName: parentUser.lastName,
-        relationship: GuardianRelationship.MOTHER,
-        isPrimary: true,
-      },
-    });
-  } else {
-    await prisma.guardian.create({
-      data: {
-        tenantId: tenant.id,
-        studentId: parentChild.id,
-        firstName: parentUser.firstName,
-        lastName: parentUser.lastName,
-        relationship: GuardianRelationship.MOTHER,
-        email: parentUser.email,
-        isPrimary: true,
-      },
-    });
-  }
 
   const teacher = await prisma.teacher.upsert({
     where: {
