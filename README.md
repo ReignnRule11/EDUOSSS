@@ -1,5 +1,8 @@
 # EduOS
 
+[![CI](https://github.com/ReignnRule11/EDUOSSS/actions/workflows/ci.yml/badge.svg)](https://github.com/ReignnRule11/EDUOSSS/actions/workflows/ci.yml)
+
+
 EduOS is a multi-tenant school management platform. It combines a NestJS REST API, a Next.js web application (public school site plus authenticated dashboard), PostgreSQL, Redis, and local or S3-compatible object storage.
 
 This README describes the **current** repository. It does not invent files, commands, modules, or environment variables. Operational detail lives in `DEPLOYMENT.md`. Architecture and extension guidance live in `ARCHITECTURE.md`.
