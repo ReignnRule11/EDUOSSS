@@ -121,7 +121,7 @@ export async function ensureSecurityE2EFixtures(prisma: PrismaClient) {
       lastName: "Student",
       gender: Gender.MALE,
       gradeLevel: GradeLevel.PRIMARY,
-      guardianEmail: "amina@sis.test",
+      guardianEmail: "unrelated.guardian@example.test",
     },
     create: {
       tenantId: tenant.id,
