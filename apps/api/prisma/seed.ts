@@ -60,7 +60,15 @@ async function main(): Promise<void> {
 
   const admin = await prisma.user.upsert({
     where: { tenantId_email: { tenantId: tenant.id, email: ADMIN_EMAIL } },
-    update: {},
+    // Keep the seeded CI account deterministic across repeated seed runs.
+    // Updating the hash prevents a stale password from making E2E login fail.
+    update: {
+      passwordHash,
+      status: UserStatus.ACTIVE,
+      emailVerifiedAt: new Date(),
+      failedLoginCount: 0,
+      lockedUntil: null
+    },
     create: {
       tenantId: tenant.id,
       email: ADMIN_EMAIL,
@@ -68,7 +76,8 @@ async function main(): Promise<void> {
       firstName: 'System',
       lastName: 'Administrator',
       role: 'TENANT_ADMIN',
-      status: UserStatus.ACTIVE
+      status: UserStatus.ACTIVE,
+      emailVerifiedAt: new Date()
     }
   })
 
