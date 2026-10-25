@@ -63,6 +63,16 @@ export class TenantResolverService {
       if (headerValue) {
         const tenant = await this.lookupByRef(headerValue);
         if (tenant) return { ...tenant, resolvedBy: "header" };
+
+        // An explicit but unknown tenant header must not fall through to the
+        // authenticated token's tenant. That would silently ignore a failed
+        // tenant-selection claim and can conceal cross-tenant probing.
+        return {
+          id: "",
+          slug: headerValue,
+          status: "SUSPENDED",
+          resolvedBy: "header",
+        };
       }
     }
 
