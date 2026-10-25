@@ -10,6 +10,7 @@ jobs:
     name: Lint / typecheck / unit tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         workspace: [api, web]
     steps:
@@ -26,6 +27,10 @@ jobs:
 
       - name: Build shared
         run: npm run build -w @eduos/shared
+
+      - name: Generate Prisma client
+        if: matrix.workspace == 'api'
+        run: npm run db:generate -w @eduos/api
 
       - name: Lint (${{ matrix.workspace }})
         run: npm run lint -w @eduos/${{ matrix.workspace }}
@@ -82,7 +87,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run db:generate -w @eduos/api
+      - name: Build shared
+        run: npm run build -w @eduos/shared
+      - name: Generate Prisma client
+        run: npm run db:generate -w @eduos/api
       - name: Apply migrations
         run: npx prisma migrate deploy --schema apps/api/prisma/schema.prisma
       - name: Seed test data
