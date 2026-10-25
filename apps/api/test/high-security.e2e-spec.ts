@@ -69,7 +69,7 @@ describe("High security remediation (H7.x)", () => {
         .expect(200);
       return res.body.data.accessToken as string;
     };
-    adminToken = await login("admin@eduos.local", "ChangeMe123!", TFA);
+    adminToken = await login("security.admin@test.local", "ChangeMe123!", TFA);
     studentToken = await login("lms.student@test.local", "Student@123", TFA);
     parentToken = await login("amina@sis.test", "Parent@123", TFA);
     teacherToken = await login("teacher@test.local", "Teacher@123", TFA);
