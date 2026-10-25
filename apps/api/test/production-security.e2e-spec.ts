@@ -6,6 +6,7 @@ import { Test } from "@nestjs/testing";
 import request from "supertest";
 
 import { AppModule } from "../src/app.module";
+import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
 import { ValidationFailedException } from "../src/common/exceptions/business.exceptions";
 import configuration, {
   validateProductionConfig,
@@ -55,6 +56,7 @@ describe("Production security hardening", () => {
     );
     await app.init();
     prisma = app.get(PrismaService);
+    await ensureSecurityE2EFixtures(prisma);
 
     const login = async (email: string, password: string, tenant: string) => {
       const res = await request(app.getHttpServer())
@@ -63,7 +65,7 @@ describe("Production security hardening", () => {
         .expect(200);
       return res.body.data.accessToken as string;
     };
-    adminToken = await login("admin@eduos.local", "ChangeMe123!", TFA);
+    adminToken = await login("security.admin@test.local", "ChangeMe123!", TFA);
     studentToken = await login("lms.student@test.local", "Student@123", TFA);
   });
 

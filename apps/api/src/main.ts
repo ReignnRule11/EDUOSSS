@@ -68,11 +68,12 @@ async function bootstrap(): Promise<void> {
       transform: true,
       transformOptions: { enableImplicitConversion: false },
       stopAtFirstError: false,
+      // Never echo submitted field values in validation errors. Request
+      // payloads can contain passwords, tokens, PII, or other sensitive data.
       exceptionFactory: (errors) => {
         const details = errors.map((error) => ({
           field: error.property,
           constraints: error.constraints ?? {},
-          value: error.value,
         }));
         throw new ValidationFailedException(details);
       },

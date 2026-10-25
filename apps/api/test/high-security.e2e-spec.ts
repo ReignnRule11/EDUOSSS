@@ -4,6 +4,7 @@ import * as bcrypt from "bcryptjs";
 import request from "supertest";
 
 import { AppModule } from "../src/app.module";
+import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
 import { ValidationFailedException } from "../src/common/exceptions/business.exceptions";
 import { PrismaService } from "../src/database/prisma.service";
 import { RedisService } from "../src/database/redis.service";
@@ -29,6 +30,8 @@ describe("High security remediation (H7.x)", () => {
   let studentToken: string;
   let parentToken: string;
   let teacherToken: string;
+  let studentAId: string;
+  let studentBId: string;
 
   // Dedicated users created/removed within this suite.
   const testUsers: string[] = [];
@@ -59,6 +62,9 @@ describe("High security remediation (H7.x)", () => {
     await app.init();
     prisma = app.get(PrismaService);
     redis = app.get(RedisService);
+    const fixtures = await ensureSecurityE2EFixtures(prisma);
+    studentAId = fixtures.studentAId;
+    studentBId = fixtures.studentBId;
 
     const login = async (email: string, password: string, tenant: string) => {
       const res = await request(app.getHttpServer())
@@ -67,7 +73,7 @@ describe("High security remediation (H7.x)", () => {
         .expect(200);
       return res.body.data.accessToken as string;
     };
-    adminToken = await login("admin@eduos.local", "ChangeMe123!", TFA);
+    adminToken = await login("security.admin@test.local", "ChangeMe123!", TFA);
     studentToken = await login("lms.student@test.local", "Student@123", TFA);
     parentToken = await login("amina@sis.test", "Parent@123", TFA);
     teacherToken = await login("teacher@test.local", "Teacher@123", TFA);
@@ -431,7 +437,7 @@ describe("High security remediation (H7.x)", () => {
   describe("no regression of critical fixes", () => {
     it("student cannot read another student's profile", async () => {
       await request(app.getHttpServer())
-        .get(`${BASE}/students/cmsev3xb8000adbc9yy6avdhr`)
+        .get(`${BASE}/students/${studentBId}`)
         .set("Authorization", `Bearer ${studentToken}`)
         .expect(404);
     });
@@ -442,7 +448,7 @@ describe("High security remediation (H7.x)", () => {
         .set("Authorization", `Bearer ${studentToken}`)
         .expect(200);
       for (const inv of res.body.data as Array<{ studentId: string }>) {
-        expect(inv.studentId).toBe("cmsm1sseu00051o135qoylwe7");
+        expect(inv.studentId).toBe(studentAId);
       }
     });
 
