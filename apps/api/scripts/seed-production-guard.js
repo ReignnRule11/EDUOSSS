@@ -11,7 +11,12 @@ const { spawnSync } = require("node:child_process");
 
 const result = spawnSync(
   process.platform === "win32" ? "npx.cmd" : "npx",
-  ["ts-node", "prisma/seed.ts"],
+  [
+    "ts-node",
+    "--compiler-options",
+    '{"noUncheckedIndexedAccess":false}',
+    "prisma/seed.ts",
+  ],
   { stdio: "inherit" },
 );
 
