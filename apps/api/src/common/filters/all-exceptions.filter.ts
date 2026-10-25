@@ -63,7 +63,6 @@ const PRISMA_ERROR_MAP: Record<string, PrismaErrorMapping> = {
  */
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  @Inject(Logger)
   private readonly logger = new Logger(AllExceptionsFilter.name);
 
   private readonly isProduction: boolean;
