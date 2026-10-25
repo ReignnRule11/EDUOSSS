@@ -83,25 +83,53 @@ export function validateProductionConfig(): void {
     );
   }
 
-  const cors = (process.env.CORS_ORIGINS ?? "").split(",").map((o) => o.trim());
-  if (cors.includes("*") || cors.length === 0) {
+  const cors = (process.env.CORS_ORIGINS ?? "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+  if (
+    cors.length === 0 ||
+    cors.includes("*") ||
+    cors.some((origin) => !/^https:\/\//i.test(origin))
+  ) {
     throw new Error(
-      "Production requires explicit CORS_ORIGINS (wildcard '*' is not allowed)",
+      "Production requires explicit HTTPS CORS_ORIGINS; wildcard and non-HTTPS origins are not allowed",
     );
+  }
+
+  if (process.env.STORAGE_DRIVER !== "s3") {
+    throw new Error("Production requires STORAGE_DRIVER=s3");
   }
 
   const s3AccessKey = process.env.S3_ACCESS_KEY_ID ?? "";
   const s3Secret = process.env.S3_SECRET_ACCESS_KEY ?? "";
+  const s3Bucket = process.env.S3_BUCKET ?? "";
   if (
-    process.env.STORAGE_DRIVER === "s3" &&
-    (s3AccessKey === "minioadmin" || s3Secret === "minioadmin")
+    !s3AccessKey ||
+    !s3Secret ||
+    !s3Bucket ||
+    s3AccessKey === "minioadmin" ||
+    s3Secret === "minioadmin"
   ) {
-    throw new Error("Production S3 storage requires non-default credentials");
+    throw new Error(
+      "Production S3 storage requires an explicit bucket and non-default credentials",
+    );
   }
 
-  if (process.env.AUTH_REQUIRE_EMAIL_VERIFICATION === "false") {
+  if (process.env.AUTH_REQUIRE_EMAIL_VERIFICATION !== "true") {
     throw new Error(
       "Production requires AUTH_REQUIRE_EMAIL_VERIFICATION=true for self-registration",
+    );
+  }
+
+  const publicBaseUrl = process.env.AUTH_PUBLIC_BASE_URL ?? "";
+  if (!/^https:\/\//i.test(publicBaseUrl)) {
+    throw new Error("Production requires an HTTPS AUTH_PUBLIC_BASE_URL");
+  }
+
+  if (!process.env.SMTP_HOST || !process.env.EMAIL_FROM) {
+    throw new Error(
+      "Production requires SMTP_HOST and EMAIL_FROM because email verification is mandatory",
     );
   }
 }
