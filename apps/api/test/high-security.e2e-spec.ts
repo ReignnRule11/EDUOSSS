@@ -30,6 +30,8 @@ describe("High security remediation (H7.x)", () => {
   let studentToken: string;
   let parentToken: string;
   let teacherToken: string;
+  let studentAId: string;
+  let studentBId: string;
 
   // Dedicated users created/removed within this suite.
   const testUsers: string[] = [];
@@ -60,7 +62,9 @@ describe("High security remediation (H7.x)", () => {
     await app.init();
     prisma = app.get(PrismaService);
     redis = app.get(RedisService);
-    await ensureSecurityE2EFixtures(prisma);
+    const fixtures = await ensureSecurityE2EFixtures(prisma);
+    studentAId = fixtures.studentAId;
+    studentBId = fixtures.studentBId;
 
     const login = async (email: string, password: string, tenant: string) => {
       const res = await request(app.getHttpServer())
@@ -433,7 +437,7 @@ describe("High security remediation (H7.x)", () => {
   describe("no regression of critical fixes", () => {
     it("student cannot read another student's profile", async () => {
       await request(app.getHttpServer())
-        .get(`${BASE}/students/cmsev3xb8000adbc9yy6avdhr`)
+        .get(`${BASE}/students/${studentBId}`)
         .set("Authorization", `Bearer ${studentToken}`)
         .expect(404);
     });
@@ -444,7 +448,7 @@ describe("High security remediation (H7.x)", () => {
         .set("Authorization", `Bearer ${studentToken}`)
         .expect(200);
       for (const inv of res.body.data as Array<{ studentId: string }>) {
-        expect(inv.studentId).toBe("cmsm1sseu00051o135qoylwe7");
+        expect(inv.studentId).toBe(studentAId);
       }
     });
 
