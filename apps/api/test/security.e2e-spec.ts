@@ -18,7 +18,7 @@ import { ensureSecurityE2EFixtures } from "./helpers/security-e2e-fixtures";
  */
 
 const ADMIN = {
-  email: "admin@eduos.local",
+  email: "security.admin@test.local",
   password: "ChangeMe123!",
   tenantSlug: "bright-future-academy",
 };
