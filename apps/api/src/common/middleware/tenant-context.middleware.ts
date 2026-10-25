@@ -33,6 +33,13 @@ export class TenantContextMiddleware implements NestMiddleware {
       resolvedBy: "none",
     };
 
+    const rawTenantHeader =
+      req.headers["x-tenant-id"] ?? req.headers["x-tenant-slug"];
+    const requestedTenantHeader =
+      typeof rawTenantHeader === "string" && rawTenantHeader.trim().length > 0
+        ? rawTenantHeader.trim()
+        : null;
+
     try {
       const resolution = await this.resolver.resolve(req);
       if (resolution) {
@@ -49,6 +56,22 @@ export class TenantContextMiddleware implements NestMiddleware {
       }
     } catch (error) {
       this.logger.warn(`Tenant resolution failed: ${(error as Error).message}`);
+    }
+
+    // An explicitly supplied tenant is an authorization claim. Never silently
+    // fall back to the JWT tenant when that claim cannot be resolved (including
+    // resolver/cache failures); protected routes must fail closed in TenantGuard.
+    if (requestedTenantHeader) {
+      TenantContext.run(
+        {
+          tenantId: null,
+          tenantSlug: requestedTenantHeader,
+          tenantStatus: "INVALID",
+          resolvedBy: "header",
+        },
+        () => next(),
+      );
+      return;
     }
 
     TenantContext.run(emptyStore, () => next());
