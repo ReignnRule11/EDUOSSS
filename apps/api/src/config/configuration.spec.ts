@@ -36,9 +36,7 @@ describe("validateProductionConfig", () => {
 
   it("rejects local file storage in production", () => {
     process.env.STORAGE_DRIVER = "local";
-    expect(() => validateProductionConfig()).toThrow(
-      "STORAGE_DRIVER=s3",
-    );
+    expect(() => validateProductionConfig()).toThrow("STORAGE_DRIVER=s3");
   });
 
   it("rejects HTTP CORS origins in production", () => {
